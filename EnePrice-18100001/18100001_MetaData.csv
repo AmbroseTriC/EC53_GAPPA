@@ -1,0 +1,66 @@
+﻿"Cube Title","Product Id","CANSIM Id",URL,"Cube Notes","Archive Status",Frequency,"Start Reference Period","End Reference Period","Total number of dimensions"
+"Monthly average retail prices for gasoline and fuel oil, by geography","18100001","326-0009","https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1810000101",2,"CURRENT - a cube available to the public and that is current","Monthly","1979-01-01","2025-12-01","2",
+
+"Dimension ID","Dimension name","Dimension Notes","Dimension Definitions"
+"1","Geography",,""
+"2","Type of fuel",,""
+
+"Dimension ID","Member Name","Classification Code","Member ID","Parent Member ID",Terminated,"Member Notes","Member Definitions"
+"1","Charlottetown and Summerside, Prince Edward Island","","3","20","",,
+"1","Halifax, Nova Scotia","[205]","4","20","",,
+"1","Saint John, New Brunswick","[310]","5","20","",,
+"1","Québec, Quebec","[421]","6","20","",,
+"1","Montréal, Quebec","[462]","7","20","",,
+"1","Ottawa-Gatineau, Ontario part, Ontario/Quebec","[35505]","8","20","",5,
+"1","Toronto, Ontario","[535]","9","20","",,
+"1","Thunder Bay, Ontario","[595]","10","20","",3,
+"1","Winnipeg, Manitoba","[602]","11","20","",,
+"1","Regina, Saskatchewan","[705]","12","20","",,
+"1","Saskatoon, Saskatchewan","[725]","13","20","",,
+"1","Edmonton, Alberta","[835]","14","20","",4,
+"1","Calgary, Alberta","[825]","15","20","",4,
+"1","Vancouver, British Columbia","[933]","16","20","",,
+"1","Victoria, British Columbia","[935]","17","20","",,
+"1","Whitehorse, Yukon","[6001009]","18","20","",,
+"1","Yellowknife, Northwest Territories","[6106023]","19","20","",,
+"1","St. John's, Newfoundland and Labrador","[001]","2","20","",,
+"1","Canada","[11124]","20","","",,
+"2","Regular unleaded gasoline at full service filling stations","","1","","t",6,
+"2","Regular unleaded gasoline at self service filling stations","","2","","",,
+"2","Premium unleaded gasoline at full service filling stations","","3","","t",6,
+"2","Premium unleaded gasoline at self service filling stations","","4","","",,
+"2","Diesel fuel at full service filling stations","","5","","t",6,
+"2","Diesel fuel at self service filling stations","","6","","",,
+"2","Household heating fuel","","7","","",,
+
+Symbol Legend
+Description,Symbol
+"not available for a specific reference period","..",
+"less than the limit of detection","<LOD",
+"value rounded to 0 (zero) where there is a meaningful distinction between true zero and the value that was rounded","0s",
+"data quality: excellent","A",
+"data quality: very good","B",
+"data quality: good","C",
+"data quality: acceptable","D",
+"use with caution","E",
+"too unreliable to be published","F",
+"not applicable","...",
+"preliminary","p",
+"revised","r",
+"suppressed to meet the confidentiality requirements of the Statistics Act","x",
+"terminated","t",
+
+"Survey Code","Survey Name"
+"2301","Consumer Price Index"
+
+"Subject Code","Subject Name"
+"18","Prices and price indexes"
+
+"Note ID",Note
+2,"For concepts and definitions, see publication Your Guide to the Consumer Price Index, catalogue no. 62-557-X, or publication The Canadian Consumer Price Index Reference Paper, catalogue no. 62-553-X. Additional information can also be obtained by contacting the <a href="mailto:statcan.cpddisseminationunit-dpcunitedediffusion.statcan@statcan.gc.ca">Consumer Prices Division</a>."
+3,"No average retail price for diesel fuel at full service filling stations is published for Thunder Bay because it is not applicable."
+4,"No average retail price for fuel oil is published for Edmonton and Calgary because it is not applicable."
+5,"Formerly Ottawa (Ottawa-Hull, Ontario part)."
+6,"Due to a lack of data availability, the average prices for Regular unleaded gasoline at full service filling stations, Premium unleaded gasoline at full service filling stations and Diesel fuel at full service filling stations will no longer be published after February 22, 2013, with the release of the January 2013 Consumer Price Index. Historical information for these series will continue to be available."
+
+"Correction ID","Correction Date","Correction Note"

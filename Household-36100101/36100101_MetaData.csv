@@ -1,0 +1,90 @@
+﻿"Cube Title","Product Id","CANSIM Id",URL,"Cube Notes","Archive Status",Frequency,"Start Reference Period","End Reference Period","Total number of dimensions"
+"Distributions of household economic accounts, number of households, by income quintile and by socio-demographic characteristic","36100101","378-0156","https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610010101",,"CURRENT - a cube available to the public and that is current","Annual","1999-01-01","2024-01-01","3",
+
+"Dimension ID","Dimension name","Dimension Notes","Dimension Definitions"
+"1","Geography",,""
+"2","Quintile",,""
+"3","Socio-demographic characteristics",,""
+
+"Dimension ID","Member Name","Classification Code","Member ID","Parent Member ID",Terminated,"Member Notes","Member Definitions"
+"1","Canada","[11124]","1","","",,
+"2","Lowest quintile","","2","1","",1,
+"2","Second quintile","","3","1","",1,
+"2","Third quintile","","4","1","",1,
+"2","Fourth quintile","","5","1","",1,
+"2","Highest quintile","","6","1","",1,
+"2","All quintiles","","1","","",,
+"3","Main source of household income: wages and salaries","","34","1","",4,
+"3","Main source of household income: self-employment income","","35","1","",4,
+"3","Main source of household income: net property income","","36","1","",4,
+"3","Main source of household income: current transfers received - pension benefits","","37","1","",4,
+"3","Main source of household income: current transfers received - others","","38","1","",4,
+"3","Pre-1946","","39","1","",5,
+"3","Baby boom","","40","1","",5,
+"3","Generation X","","41","1","",5,
+"3","Millennials","","42","1","",5,
+"3","Nunavut, households","","29","1","",,
+"3","Renter","","30","1","",3,
+"3","Owner","","31","1","",3,
+"3","One-person households","","2","1","",,
+"3","Multiple-person households","","5","1","",,
+"3","Less than 35 years","","12","1","",2,
+"3","35 to 44 years","","13","1","",2,
+"3","45 to 54 years","","14","1","",2,
+"3","55 to 64 years","","15","1","",2,
+"3","65 years and over","","16","1","",2,
+"3","Newfoundland and Labrador, households","","17","1","",,
+"3","Prince Edward Island, households","","18","1","",,
+"3","Nova Scotia, households","","19","1","",,
+"3","New Brunswick, households","","20","1","",,
+"3","Quebec, households","","21","1","",,
+"3","Ontario, households","","22","1","",,
+"3","Manitoba, households","","23","1","",,
+"3","Saskatchewan, households","","24","1","",,
+"3","Alberta, households","","25","1","",,
+"3","British Columbia, households","","26","1","",,
+"3","Yukon, households","","27","1","",,
+"3","Northwest Territories, households","","28","1","",,
+"3","Single less than 65 years","","3","2","t",,
+"3","Single 65 years and older","","4","2","t",,
+"3","Single with children living at home","","6","5","t",,
+"3","Two adults less than 65 years, no children at home","","7","5","t",,
+"3","Two adults at least one 65 years or older, no child living at home","","8","5","t",,
+"3","Two adults with less than 3 children living at home","","9","5","t",,
+"3","Two adults with at least 3 children living at home","","10","5","t",,
+"3","Others","","11","5","t",,
+"3","Owner with mortgage","","32","31","",3,
+"3","Owner without mortgage","","33","31","",3,
+"3","All households","","1","","",,
+
+Symbol Legend
+Description,Symbol
+"not available for a specific reference period","..",
+"less than the limit of detection","<LOD",
+"value rounded to 0 (zero) where there is a meaningful distinction between true zero and the value that was rounded","0s",
+"data quality: excellent","A",
+"data quality: very good","B",
+"data quality: good","C",
+"data quality: acceptable","D",
+"use with caution","E",
+"too unreliable to be published","F",
+"not applicable","...",
+"preliminary","p",
+"revised","r",
+"suppressed to meet the confidentiality requirements of the Statistics Act","x",
+"terminated","t",
+
+"Survey Code","Survey Name"
+"1901","National Gross Domestic Product by Income and by Expenditure Accounts"
+
+"Subject Code","Subject Name"
+"36","Economic accounts"
+
+"Note ID",Note
+1,"Income quintiles are assigned based on equivalized household disposable income, which takes into account differences in household size and composition using a method proposed by the Organization for Economic Co-operation and Development (OECD). The "OECD-modified" equivalence scale assigns a value of 1 to the first adult, 0.5 to each additional person aged 14 and over, and 0.3 for all children under 14."
+2,"Age groups refer to the age group of the major income earner."
+3,"Housing tenure of household"
+4,"Refers to the main source of income for the household, either from wages and salaries, self-employment income, net property income, current transfers received related to pension benefits, or from other current transfers received from non-pension related sources (others)."
+5,"Distributions by generation are defined as follows and are based on the birth year of the major income earner : pre-1946 for those born before 1946, baby boom for those born between 1946 and 1964, generation X for those born between 1965 and 1980 and millennials for those born after 1980.  Note that generation Z has been combined with the millennial generation as their sample size is relatively small."
+
+"Correction ID","Correction Date","Correction Note"

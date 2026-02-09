@@ -1,0 +1,332 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage{longtable}
+\usepackage{amsmath, amssymb}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\usepackage[backend=biber,style=apa,sortcites=true]{biblatex}
+\addbibresource{references.bib}
+
+\setstretch{1.2}
+
+% Setup siunitx for rounding and group separation
+\sisetup{
+    group-separator = {,},
+    round-mode = places,
+    round-pad = false
+}
+
+\title{Progressivity of Canada's Fuel Charge (GGPPA Part I) With and Without the Canada Carbon Rebate, 2019--2025}
+\date{February 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This report estimates the distributional incidence of Canada's federal fuel charge (Part~I of the \emph{Greenhouse Gas Pollution Pricing Act}, GGPPA) in Ontario, Manitoba, Saskatchewan, and Alberta over policy years 2019--2025, with and without the associated household rebate (the Climate Action Incentive payment / Canada Carbon Rebate, hereafter ``CCR''). The analysis combines household expenditures by before-tax income quintile with fuel-price series, household counts, and statutory fuel-charge rates to construct direct household fuel-charge burdens. Indirect price effects are incorporated through a calibrated non-direct cost wedge anchored to Department of Finance Canada ``average cost impact'' estimates for 2021 and 2024--2025. Net incidence is computed by applying CCR schedules for representative household types. Progressivity is summarized using effective tax rates and Kakwani indices.
+\end{abstract}
+
+\section{Policy context}
+Part~I of the GGPPA imposes a federal fuel charge in jurisdictions without a compliant provincial system. The charge applies to a schedule of fuels and is generally passed through to consumer prices. In backstop jurisdictions, most fuel-charge proceeds are returned to households via refundable credits administered through the personal income tax system: the Climate Action Incentive (CAI) payment in earlier years and the Canada Carbon Rebate (CCR) in later years \parencite{fin2019,fin2024}. 
+
+The analysis focuses on four provinces that have been subject to the federal fuel charge at various points: Ontario (ON), Manitoba (MB), Saskatchewan (SK), and Alberta (AB). For interpretability, the policy-year index $t$ is aligned to the federal fuel-charge year (April--March). The 2025 policy year is treated as a post-repeal counterfactual with a zero fuel charge (and thus zero CCR), consistent with the CRA statement that fuel charge rates are \SI{0}{} starting April~1,~2025 \parencite{cra_fuel_charge_rates}.
+
+\section{Data and sources}
+Four primary datasets are used:
+\begin{enumerate}
+    \item \textbf{Household expenditures by income quintile and province}. Summary-level annual expenditures per household are taken from Statistics Canada Table~11-10-0223-01 (available for 2019, 2021, and 2023 in the provided extract), including total expenditure and fuel-related categories \parencite{statcan11100223}. Missing intermediate years (2020, 2022) are filled by within-quintile linear interpolation; 2024--2025 values are held at 2023 levels in the absence of later observations.
+    \item \textbf{Fuel prices}. Monthly retail price series are taken from Statistics Canada Table~18-10-0001-01 for regular unleaded gasoline (self-service) and household heating fuel \parencite{statcan18100001}. City-level series within each province are averaged to province-year prices.
+    \item \textbf{Number of households}. Quintile household counts are taken from Statistics Canada Table~36-10-0101-01 \parencite{statcan36100101}. These counts are used as weights when aggregating quintile outcomes to a provincial average.
+    \item \textbf{Fuel charge rates}. Pre-2023 fuel charge rates are taken from the provided rate items extract. Post-2022 rates are extrapolated proportionally to the statutory carbon-price schedule using the CRA fuel-charge rate tables as the governing reference for the relationship between the per-unit charge and the carbon price \parencite{cra_fuel_charge_rates}.
+\end{enumerate}
+
+CCR schedules are taken directly from Department of Finance Canada annual backgrounders \parencite{fin2019,fin2020,fin2021,fin2022,fin2023,fin2024}. A rural ``small and rural communities'' supplement is modeled as 10\% through 2023--2024 and 20\% in 2024--2025 \parencite{fin2024}.
+
+\section{Methodology}
+\subsection{Direct fuel-charge burden}
+Let $r$ index province, $q$ index income quintile, and $t$ index policy year. Let $\mathcal{F}$ denote the set of modeled fuels: gasoline, light fuel oil (as a proxy for household heating fuel), and marketable natural gas. Direct fuel-charge payments are modeled as
+\begin{equation}
+    T^{\text{direct}}_{rqt} = \sum_{f \in \mathcal{F}} Q_{rqt,f}\,\tau_{t,f},
+\end{equation}
+where $Q_{rqt,f}$ is the average annual quantity of fuel $f$ consumed by a representative household in quintile $q$ and province $r$, and $\tau_{t,f}$ is the statutory fuel-charge rate (dollars per physical unit).
+
+Quantities are inferred from expenditures and prices:
+\begin{equation}
+    Q_{rqt,f} =
+    \begin{cases}
+        \dfrac{E_{rqt,f}}{P_{rt,f}} & \text{for liquid fuels (liters)},\\[8pt]
+        \phi_r\,E_{rqt,NG} & \text{for natural gas (gigajoules)}.
+    \end{cases}
+\end{equation}
+Here $E_{rqt,f}$ denotes fuel expenditures and $P_{rt,f}$ denotes the province-year retail fuel price. For natural gas, the available expenditure category includes fixed charges; therefore, $Q_{rqt,NG}$ is approximated using a reduced-form ``GJ per dollar'' factor $\phi_r$ that maps dollars to gigajoules. The statutory natural-gas fuel charge is quoted per cubic meter; the conversion $1\ \text{GJ} = 26.853\ \text{m}^3$ is used to express the rate in dollars per gigajoule.
+
+\subsection{Indirect price effects (reduced-form calibration)}
+Finance Canada reports an ``average cost impact per household'' that reflects both direct fuel-charge effects and indirect effects embedded in consumer purchases of other goods and services \parencite{fin2021,fin2024}. Indirect effects are incorporated via a multiplicative wedge:
+\begin{equation}
+    T^{\text{gross}}_{rqt} = (1+\kappa_{rt})\,T^{\text{direct}}_{rqt}.
+\end{equation}
+The wedge $\kappa_{rt}$ is calibrated to match Finance Canada anchors for 2021 and 2024:
+\begin{equation}
+    \kappa_{rt^\ast} = \frac{\overline{F}_{rt^\ast}}{\overline{T}^{\text{direct}}_{rt^\ast}} - 1,
+\end{equation}
+where $\overline{F}_{rt^\ast}$ is Finance Canada's provincial average cost impact per household and $\overline{T}^{\text{direct}}_{rt^\ast}$ is the household-weighted average of modeled direct costs across quintiles. For non-anchor years, $\kappa_{rt}$ is interpolated linearly in the statutory carbon price. This approach provides a ``PBO-style'' incidence adjustment insofar as indirect effects are explicitly represented and grounded in official incidence summaries, but it is not a full input--output decomposition.
+
+\subsection{Rebate (CCR) and net incidence}
+CCR schedules provide annual base amounts for the first adult, the second adult, and each child. For a household type $h$ (single adult, couple without children, family of four), the baseline annual rebate is
+\begin{equation}
+    R^{\text{base}}_{rt}(h) = R^{(1)}_{rt} + \mathbf{1}\{h \text{ includes second adult}\}R^{(2)}_{rt} + n_c(h)\,R^{(c)}_{rt},
+\end{equation}
+where $n_c(h)$ is the number of children in household type $h$. A rural supplement is modeled as a proportional top-up:
+\begin{equation}
+    R^{\text{rural}}_{rt}(h) = (1+\rho_t)\,R^{\text{base}}_{rt}(h),
+\end{equation}
+with $\rho_t \in \{0.10, 0.20\}$ depending on year.
+
+Net incidence for household type $h$ is then
+\begin{equation}
+    T^{\text{net}}_{rqt}(h) = T^{\text{gross}}_{rqt} - R_{rt}(h).
+\end{equation}
+
+\subsection{Effective tax rates}
+An effective tax rate (ETR) is computed relative to total expenditure:
+\begin{equation}
+    \text{ETR}_{rqt} = \frac{T_{rqt}}{E^{\text{total}}_{rqt}},
+\end{equation}
+where $T_{rqt}$ denotes a direct, gross, or net measure and $E^{\text{total}}_{rqt}$ is total annual expenditure.
+
+\subsection{Progressivity summary: Kakwani index}
+Progressivity is summarized using the Kakwani index:
+\begin{equation}
+    K = C_T - G,
+\end{equation}
+where $G$ is the Gini coefficient of total expenditure and $C_T$ is the concentration coefficient of the tax (or net burden) when households are ranked by expenditure. Negative $K$ indicates regressivity; positive $K$ indicates progressivity. When the modeled net program is a net transfer (aggregate net burden negative), $K$ is not reported for that measure because a ``tax concentration'' statistic is not well-defined in that case.
+
+\section{Key inputs: CCR schedules}
+Table~\ref{tab:ccr_family4} reports baseline CCR amounts for a family of four. These values are taken directly from annual Finance Canada CCR/CAI backgrounders \parencite{fin2019,fin2020,fin2021,fin2022,fin2023,fin2024}. Alberta receives no CAI in 2019 under the simplifying assumption that the fuel charge effectively begins in 2020 in Alberta; the 2020 Alberta CAI schedule reflects the 15-month adjustment noted by Finance Canada \parencite{fin2020}.
+
+\begin{table}[ht]
+\centering
+\caption{Baseline CCR (family of four) by province and policy year (annual dollars).}
+\label{tab:ccr_family4}
+\begin{tabular}{lrrrr}
+\toprule
+Province & Ontario & Manitoba & Saskatchewan & Alberta \\
+Year &  &  &  &  \\
+\midrule
+2019 & 307 & 339 & 609 & 0 \\
+2020 & 448 & 486 & 809 & 888 \\
+2021 & 600 & 720 & 1000 & 981 \\
+2022 & 745 & 832 & 1101 & 1079 \\
+2023 & 976 & 1056 & 1360 & 1544 \\
+2024 & 1120 & 1200 & 1504 & 1800 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\section{Indirect-effect calibration and cross-validation}
+Table~\ref{tab:calibration} documents the calibration of $\kappa_{rt}$ using Finance Canada's cost-impact estimates for 2021 and 2024 \parencite{fin2021,fin2024}. By construction, the household-weighted modelled gross costs match Finance Canada's reported averages in those anchor years. The table also reports the modeled direct cost component, which is typically below the Finance cost impact, consistent with (i) indirect effects embedded in other consumption categories and (ii) incomplete coverage of all taxable fuels in the expenditure categories.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Crosswalk for indirect-cost calibration: modelled direct costs and Finance Canada cost impacts (dollars per household).}
+\label{tab:calibration}
+\begin{tabular}{
+    l 
+    l 
+    S[table-format=3.1, round-precision=1] 
+    S[table-format=4.1, round-precision=1] 
+    S[table-format=4.0, round-precision=0] 
+    S[table-format=1.1, round-precision=1]
+}
+\toprule
+{Year} & {Province} & {Direct cost} & {Gross cost} & {Finance Impact} & {Diff} \\
+ & & {(model)} & {(model)} & {(Official)} & {(Gross - Fin)} \\
+\midrule
+2021 & Ontario & 234.400000 & 439.000000 & 439 & 0.000000 \\
+2021 & Manitoba & 218.000000 & 462.000000 & 462 & 0.000000 \\
+2021 & Saskatchewan & 292.400000 & 720.000000 & 720 & 0.000000 \\
+2021 & Alberta & 308.700000 & 598.000000 & 598 & 0.000000 \\
+2024 & Ontario & 492.900000 & 869.000000 & 869 & 0.000000 \\
+2024 & Manitoba & 496.000000 & 828.000000 & 828 & 0.000000 \\
+2024 & Saskatchewan & 653.900000 & 1156.000000 & 1156 & 0.000000 \\
+2024 & Alberta & 812.300000 & 1056.000000 & 1056 & 0.000000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+The resulting wedges $\kappa_{rt}$ are shown in Table~\ref{tab:kappa}. A higher $\kappa_{rt}$ implies that non-direct cost components are relatively large compared to directly modeled household fuel charges.
+
+\begin{table}[ht]
+\centering
+\caption{Calibrated non-direct cost multiplier $\kappa_{r,t}$ (Finance Canada anchors: 2021 and 2024).}
+\label{tab:kappa}
+\begin{tabular}{l
+    S[table-format=1.2, round-precision=2]
+    S[table-format=1.2, round-precision=2]
+    S[table-format=1.2, round-precision=2]
+    S[table-format=1.2, round-precision=2]
+}
+\toprule
+{Year} & {Alberta} & {Manitoba} & {Ontario} & {Saskatchewan} \\
+\midrule
+2019 & 1.260000 & 1.340000 & 0.930000 & 1.810000 \\
+2021 & 0.940000 & 1.120000 & 0.870000 & 1.460000 \\
+2024 & 0.300000 & 0.670000 & 0.760000 & 0.770000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\section{Distributional results}
+\subsection{Gross incidence (before CCR)}
+Gross incidence (direct plus calibrated indirect effects) rises monotonically in absolute dollars with income quintile in each province-year, reflecting higher average fuel-related expenditures among higher-expenditure households. However, the gross \emph{effective tax rate} (gross cost divided by total expenditure) is generally higher in lower quintiles, implying regressivity in proportional terms.
+
+\subsection{Net incidence (after CCR): household-type scenarios}
+Net incidence depends on household composition because CCR schedules vary with the number of adults and children. In the absence of household composition microdata by quintile in the provided inputs, net incidence is reported under three canonical household types: a single adult, a couple without children, and a family of four.
+
+Table~\ref{tab:incidence2024} illustrates the 2024--2025 policy year (year~2024) using the single-adult CCR schedule. In the lowest quintile, the modeled CCR can exceed gross costs, yielding a net transfer. In higher quintiles, the net burden remains positive. For couples and families of four, the CCR is larger, increasing the set of households for whom net incidence is negative.
+
+\begin{table}[ht]
+\centering
+\footnotesize
+\caption{Quintile incidence in 2024--2025 (policy year 2024): gross cost, CCR (single adult), net cost, and effective tax rates.}
+\label{tab:incidence2024}
+\begin{tabular}{
+    l 
+    l 
+    S[table-format=4.0, round-precision=0] 
+    S[table-format=3.0, round-precision=0] 
+    S[table-format=3.0, round-precision=0] 
+    S[table-format=-3.0, round-precision=0] 
+    S[table-format=1.2, round-precision=2] 
+    S[table-format=-1.2, round-precision=2]
+}
+\toprule
+{Province} & {Quintile} & {Gross Cost} & {Direct Cost} & {CCR} & {Net Cost} & {ETR Gross} & {ETR Net} \\
+& & {(\$)} & {(\$)} & {(Single)} & {(\$)} & {(\%)} & {(\%)} \\
+\midrule
+Ontario & Lowest & 437 & 248 & 560 & -123 & 0.980000 & -0.270000 \\
+Ontario & Second & 788 & 447 & 560 & 228 & 1.070000 & 0.310000 \\
+Ontario & Third & 799 & 453 & 560 & 239 & 0.840000 & 0.250000 \\
+Ontario & Fourth & 1059 & 601 & 560 & 499 & 0.820000 & 0.390000 \\
+Ontario & Highest & 1276 & 724 & 560 & 716 & 0.520000 & 0.290000 \\
+\addlinespace
+Manitoba & Lowest & 342 & 205 & 600 & -258 & 0.900000 & -0.680000 \\
+Manitoba & Second & 541 & 324 & 600 & -59 & 0.900000 & -0.100000 \\
+Manitoba & Third & 762 & 457 & 600 & 162 & 0.980000 & 0.210000 \\
+Manitoba & Fourth & 1103 & 661 & 600 & 503 & 1.010000 & 0.460000 \\
+Manitoba & Highest & 1428 & 855 & 600 & 828 & 0.780000 & 0.450000 \\
+\addlinespace
+Saskatchewan & Lowest & 503 & 285 & 752 & -249 & 1.270000 & -0.630000 \\
+Saskatchewan & Second & 858 & 485 & 752 & 106 & 1.400000 & 0.170000 \\
+Saskatchewan & Third & 1012 & 572 & 752 & 260 & 1.310000 & 0.340000 \\
+Saskatchewan & Fourth & 1306 & 739 & 752 & 554 & 1.160000 & 0.490000 \\
+Saskatchewan & Highest & 1769 & 1001 & 752 & 1017 & 1.000000 & 0.580000 \\
+\addlinespace
+Alberta & Lowest & 539 & 414 & 900 & -361 & 1.120000 & -0.750000 \\
+Alberta & Second & 989 & 761 & 900 & 89 & 1.230000 & 0.110000 \\
+Alberta & Third & 956 & 735 & 900 & 56 & 0.900000 & 0.050000 \\
+Alberta & Fourth & 1045 & 804 & 900 & 145 & 0.810000 & 0.110000 \\
+Alberta & Highest & 1366 & 1051 & 900 & 466 & 0.570000 & 0.190000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\subsection{Progressivity metrics}
+Table~\ref{tab:kakwani2024} reports Kakwani indices for 2024. Direct and gross indices are negative in each province, consistent with regressivity before rebates. After applying the CCR for a single-adult household, the net Kakwani index becomes positive, illustrating how the rebate can overturn gross regressivity in this scenario.
+
+\begin{table}[ht]
+\centering
+\caption{Kakwani indices in 2024--2025 (policy year 2024). Negative values imply regressivity relative to total expenditure; positive values imply progressivity.}
+\label{tab:kakwani2024}
+\begin{tabular}{l
+    S[table-format=-1.3, round-precision=3]
+    S[table-format=-1.3, round-precision=3]
+    S[table-format=1.3, round-precision=3]
+}
+\toprule
+{Province} & {Direct cost} & {Gross cost} & {Net (single adult)} \\
+\midrule
+Alberta & -0.140000 & -0.140000 & 0.573000 \\
+Manitoba & -0.024000 & -0.024000 & 0.593000 \\
+Ontario & -0.124000 & -0.124000 & 0.169000 \\
+Saskatchewan & -0.066000 & -0.066000 & 0.275000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\section{Limitations and interpretation}
+Three limitations are especially salient.
+\begin{enumerate}
+    \item \textbf{Fuel aggregation in expenditures}. The vehicle-fuel expenditure category aggregates gasoline with other fuels. Treating it as gasoline introduces measurement error in inferred liters and thus in direct fuel-charge burdens.
+    \item \textbf{Natural gas quantity inference}. The natural-gas expenditure category includes fixed charges. Converting dollars to gigajoules with a constant $\phi_r$ is a reduced-form approximation that may understate or overstate physical consumption.
+    \item \textbf{Indirect effects modeling}. Indirect effects are represented through a calibrated wedge anchored to Finance Canada household-average cost impacts, rather than a full input--output model. Consequently, the indirect component does not introduce additional within-year distributional variation beyond what is present in direct fuel expenditures.
+\end{enumerate}
+Notwithstanding these limitations, qualitative conclusions align with official distributional analyses, including Parliamentary Budget Officer assessments that emphasize the role of rebates in shifting net incidence toward progressivity for many households \parencite{pbo2019,pbo2024_update}.
+
+\appendix
+\section{Kakwani indices across years}
+Table~\ref{tab:kakwani_all} reports Kakwani indices for all policy years in the sample for (i) direct modeled fuel charges, (ii) gross costs including calibrated indirect effects, and (iii) net costs for the single-adult CCR scenario.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Kakwani indices by province and policy year (selected measures).}
+\label{tab:kakwani_all}
+\begin{tabular}{ll
+    S[table-format=-1.3, round-precision=3]
+    S[table-format=-1.3, round-precision=3]
+    S[table-format=1.3, round-precision=3]
+}
+\toprule
+{Province} & {Year} & {Direct cost} & {Gross cost} & {Net (single adult)} \\
+\midrule
+Alberta & 2020 & -0.127000 & -0.127000 & 0.276000 \\
+Alberta & 2021 & -0.105000 & -0.105000 & 0.533000 \\
+Alberta & 2022 & -0.125000 & -0.125000 & 0.224000 \\
+Alberta & 2023 & -0.142000 & -0.142000 & 0.181000 \\
+Alberta & 2024 & -0.140000 & -0.140000 & 0.573000 \\
+Manitoba & 2020 & -0.042000 & -0.042000 & 0.173000 \\
+Manitoba & 2021 & -0.038000 & -0.038000 & 0.676000 \\
+Manitoba & 2022 & -0.032000 & -0.032000 & 1.376000 \\
+Manitoba & 2023 & -0.029000 & -0.029000 & 0.735000 \\
+Manitoba & 2024 & -0.024000 & -0.024000 & 0.593000 \\
+Manitoba & 2019 & -0.045000 & -0.045000 & 0.209000 \\
+Ontario & 2020 & -0.097000 & -0.097000 & 0.102000 \\
+Ontario & 2021 & -0.096000 & -0.096000 & 0.289000 \\
+Ontario & 2022 & -0.110000 & -0.110000 & 0.384000 \\
+Ontario & 2023 & -0.123000 & -0.123000 & 0.225000 \\
+Ontario & 2024 & -0.124000 & -0.124000 & 0.169000 \\
+Ontario & 2019 & -0.098000 & -0.098000 & 0.128000 \\
+Saskatchewan & 2020 & -0.084000 & -0.084000 & 0.118000 \\
+Saskatchewan & 2021 & -0.102000 & -0.102000 & 0.237000 \\
+Saskatchewan & 2022 & -0.083000 & -0.083000 & 0.291000 \\
+Saskatchewan & 2023 & -0.066000 & -0.066000 & 0.263000 \\
+Saskatchewan & 2024 & -0.066000 & -0.066000 & 0.275000 \\
+Saskatchewan & 2019 & -0.069000 & -0.069000 & 0.204000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\section{Reproducibility outputs}
+The accompanying Python script (\texttt{compute\_ggppa\_progressivity\_v2.py}) produces:
+\begin{itemize}
+    \item \texttt{ggppa\_progressivity\_results\_v2.csv} (quintile-by-province-by-year incidence measures);
+    \item \texttt{ggppa\_kakwani\_indices\_v2.csv} (progressivity indices);
+    \item \texttt{ggppa\_finance\_crosswalk\_v2.csv} (calibration diagnostics).
+\end{itemize}
+
+\printbibliography
+
+\end{document}

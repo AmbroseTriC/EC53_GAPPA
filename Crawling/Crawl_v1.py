@@ -230,6 +230,16 @@ def parse_period_from_caption(caption: str) -> Tuple[str, str]:
     return "", ""
 
 
+def locate_multiperiod_header_row(rows: List[List[str]]) -> Optional[int]:
+    for i, row in enumerate(rows[:12]):
+        row_norm = [c.strip() for c in row]
+        if "Type" not in row_norm or "Unit" not in row_norm:
+            continue
+        if any("Rates of charge applicable" in c for c in row_norm):
+            return i
+    return None
+
+
 def expand_table(table: Tag) -> List[List[str]]:
     rows = table.find_all("tr")
     grid: List[List[str]] = []
@@ -315,10 +325,57 @@ def extract_rates(soup: BeautifulSoup, version_date: str) -> List[Dict[str, str]
 
         expanded = expand_table(table)
         header_idx = locate_header_row(expanded)
+        if header_idx is not None:
+            header = expanded[header_idx]
+
+            # map column indexes
+            def col_idx(col_name: str) -> Optional[int]:
+                for i, h in enumerate(header):
+                    if h.strip() == col_name:
+                        return i
+                return None
+
+            idx_type = col_idx("Type")
+            idx_unit = col_idx("Unit")
+            idx_prov = col_idx("Listed Province")
+            idx_rate = col_idx("Rate")
+            if None in (idx_type, idx_unit, idx_prov, idx_rate):
+                continue
+
+            for row in expanded[header_idx + 1 :]:
+                if len(row) <= max(idx_type, idx_unit, idx_prov, idx_rate):
+                    continue
+                fuel = clean_text(row[idx_type])
+                unit = clean_text(row[idx_unit])
+                prov = clean_text(row[idx_prov])
+                rate = clean_text(row[idx_rate])
+                if not fuel and not rate:
+                    continue
+                # skip header-like rows
+                if fuel.lower() == "type" and rate.lower() == "rate":
+                    continue
+                rate_value = pd.to_numeric(rate, errors="coerce")
+                if pd.isna(rate_value):
+                    continue
+                results.append(
+                    {
+                        "Version_Date": version_date,
+                        "Period_Start": period_start,
+                        "Period_End": period_end,
+                        "Fuel_Type": fuel,
+                        "Unit": unit,
+                        "Province": prov,
+                        "Rate": float(rate_value),
+                    }
+                )
+            continue
+
+        # Table 5 layout: no "Listed Province", and rate periods are separate columns.
+        header_idx = locate_multiperiod_header_row(expanded)
         if header_idx is None:
             continue
         header = expanded[header_idx]
-        # map column indexes
+
         def col_idx(col_name: str) -> Optional[int]:
             for i, h in enumerate(header):
                 if h.strip() == col_name:
@@ -327,34 +384,46 @@ def extract_rates(soup: BeautifulSoup, version_date: str) -> List[Dict[str, str]
 
         idx_type = col_idx("Type")
         idx_unit = col_idx("Unit")
-        idx_prov = col_idx("Listed Province")
-        idx_rate = col_idx("Rate")
-        if None in (idx_type, idx_unit, idx_prov, idx_rate):
+        if None in (idx_type, idx_unit):
             continue
 
+        period_cols: List[Tuple[int, str, str]] = []
+        for idx, h in enumerate(header):
+            if "Rates of charge applicable" not in h:
+                continue
+            col_start, col_end = parse_period_from_caption(h)
+            if not col_start and not col_end:
+                continue
+            period_cols.append((idx, col_start, col_end))
+
+        if not period_cols:
+            continue
+
+        max_idx = max([idx_type, idx_unit] + [x[0] for x in period_cols])
         for row in expanded[header_idx + 1 :]:
-            if len(row) <= max(idx_type, idx_unit, idx_prov, idx_rate):
+            if len(row) <= max_idx:
                 continue
             fuel = clean_text(row[idx_type])
             unit = clean_text(row[idx_unit])
-            prov = clean_text(row[idx_prov])
-            rate = clean_text(row[idx_rate])
-            if not fuel and not rate:
+            if not fuel or fuel.lower() == "type":
                 continue
-            # skip header-like rows
-            if fuel.lower() == "type" and rate.lower() == "rate":
-                continue
-            results.append(
-                {
-                    "Version_Date": version_date,
-                    "Period_Start": period_start,
-                    "Period_End": period_end,
-                    "Fuel_Type": fuel,
-                    "Unit": unit,
-                    "Province": prov,
-                    "Rate": rate,
-                }
-            )
+
+            for col_idx_rate, col_start, col_end in period_cols:
+                rate = clean_text(row[col_idx_rate])
+                rate_value = pd.to_numeric(rate, errors="coerce")
+                if pd.isna(rate_value):
+                    continue
+                results.append(
+                    {
+                        "Version_Date": version_date,
+                        "Period_Start": col_start,
+                        "Period_End": col_end,
+                        "Fuel_Type": fuel,
+                        "Unit": unit,
+                        "Province": "",
+                        "Rate": float(rate_value),
+                    }
+                )
     return results
 
 

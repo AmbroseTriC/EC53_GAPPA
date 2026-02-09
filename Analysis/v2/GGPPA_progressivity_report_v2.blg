@@ -1,0 +1,19 @@
+[0] Config.pm:307> INFO - This is Biber 2.19
+[0] Config.pm:310> INFO - Logfile is 'GGPPA_progressivity_report_v2.blg'
+[25] biber-darwin:340> INFO - === Mon Feb  9, 2026, 14:54:37
+[33] Biber.pm:419> INFO - Reading 'GGPPA_progressivity_report_v2.bcf'
+[67] Biber.pm:979> INFO - Found 12 citekeys in bib section 0
+[75] Biber.pm:4419> INFO - Processing section 0
+[80] Biber.pm:4610> INFO - Looking for bibtex file 'references.bib' for section 0
+[80] bibtex.pm:1713> INFO - LaTeX decoding ...
+[84] bibtex.pm:1519> INFO - Found BibTeX data source 'references.bib'
+[117] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[117] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[117] Biber.pm:4239> INFO - Sorting list 'apa/apasortcite//global/global' of type 'entry' with template 'apa' and locale 'en-US'
+[117] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[127] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[127] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[127] Biber.pm:4239> INFO - Sorting list 'apa/global//global/global' of type 'entry' with template 'apa' and locale 'en-US'
+[127] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[134] bbl.pm:660> INFO - Writing 'GGPPA_progressivity_report_v2.bbl' with encoding 'UTF-8'
+[137] bbl.pm:763> INFO - Output to GGPPA_progressivity_report_v2.bbl

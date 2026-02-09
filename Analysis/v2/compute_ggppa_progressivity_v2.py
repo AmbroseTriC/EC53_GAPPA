@@ -25,7 +25,7 @@ Data inputs (expected in the working directory)
 - 11100223.xlsx   (Statistics Canada Table 11-10-0223-01 extract)
 - 18100001.xlsx   (Statistics Canada Table 18-10-0001-01 extract)
 - 36100101.xlsx   (Statistics Canada Table 36-10-0101-01 extract)
-- Tax Rate Items.xlsx (provided extract of federal fuel-charge rate items)
+- Tax Rate Items_v2.xlsx (provided extract of federal fuel-charge rate items)
 
 Notes
 -----
@@ -61,7 +61,7 @@ QUINTILES = [
 ]
 YEARS_FULL = list(range(2019, 2026))
 
-# Statutory carbon price schedule used to extrapolate post-2022 fuel-charge rates
+# Statutory carbon price schedule used in kappa calibration.
 CARBON_PRICE = {2019: 20, 2020: 30, 2021: 40, 2022: 50, 2023: 65, 2024: 80, 2025: 0}
 
 # Fuel types and CPI series labels used in 18-10-0001-01 extract
@@ -263,36 +263,43 @@ def load_households(path: str) -> pd.DataFrame:
 
 
 def build_rates(path: str) -> pd.DataFrame:
+    fuel_cols = ["Gasoline", "Light fuel oil", "Marketable natural gas"]
     rates = pd.read_excel(path, sheet_name="Rates")
-    rates = rates[rates["Fuel_Type"].isin(["Gasoline", "Light fuel oil", "Marketable natural gas"])]
+    rates = rates[rates["Fuel_Type"].isin(fuel_cols)]
     rates = rates[rates["Province"].isin(PROVINCES)].copy()
-    rates["Period_Start"] = pd.to_datetime(rates["Period_Start"])
+    rates["Rate"] = pd.to_numeric(rates["Rate"], errors="coerce")
+    rates["Period_Start"] = pd.to_datetime(rates["Period_Start"], errors="coerce")
     rates["Year"] = rates["Period_Start"].dt.year
-    rates = rates[rates["Year"].between(2019, 2022)]
+    rates = rates[rates["Year"].between(min(YEARS_FULL), max(YEARS_FULL))]
 
-    piv = rates.pivot_table(index=["Year", "Province"], columns="Fuel_Type", values="Rate", aggfunc="mean").reset_index()
-    base_2022 = piv[piv["Year"] == 2022].iloc[0][["Gasoline", "Light fuel oil", "Marketable natural gas"]].to_dict()
+    piv = (
+        rates.pivot_table(
+            index=["Year", "Province"],
+            columns="Fuel_Type",
+            values="Rate",
+            aggfunc="mean",
+        )
+        .reset_index()
+    )
+    for col in fuel_cols:
+        if col not in piv.columns:
+            piv[col] = float("nan")
 
-    rows: list[dict] = []
-    for prov in PROVINCES:
-        for y in YEARS_FULL:
-            if y <= 2022:
-                r = piv[(piv["Province"] == prov) & (piv["Year"] == y)]
-                if len(r):
-                    vals = r.iloc[0][["Gasoline", "Light fuel oil", "Marketable natural gas"]].to_dict()
-                else:
-                    vals = {k: float("nan") for k in base_2022}
-            else:
-                ratio = (CARBON_PRICE[y] / CARBON_PRICE[2022]) if CARBON_PRICE[y] > 0 else 0.0
-                vals = {k: base_2022[k] * ratio for k in base_2022}
+    full_index = pd.MultiIndex.from_product(
+        [PROVINCES, YEARS_FULL], names=["Province", "Year"]
+    )
+    bal = (
+        piv.set_index(["Province", "Year"])[fuel_cols]
+        .reindex(full_index)
+        .reset_index()
+    )
 
-            # Alberta: no fuel charge modeled in 2019
-            if prov == "Alberta" and y == 2019:
-                vals = {k: 0.0 for k in base_2022}
+    # Alberta: no fuel charge modeled in 2019 (legacy model rule).
+    mask_ab_2019 = (bal["Province"] == "Alberta") & (bal["Year"] == 2019)
+    for col in fuel_cols:
+        bal.loc[mask_ab_2019, col] = 0.0
 
-            rows.append({"Province": prov, "Year": y, **vals})
-
-    return pd.DataFrame(rows)
+    return bal[["Province", "Year", *fuel_cols]]
 
 
 def build_ccr() -> pd.DataFrame:
@@ -359,7 +366,7 @@ def main() -> None:
     exp = load_expenditures("11100223.xlsx")
     prices = load_prices("18100001.xlsx")
     hh = load_households("36100101.xlsx")
-    rates = build_rates("Tax Rate Items.xlsx")
+    rates = build_rates("Tax Rate Items_v2.xlsx")
     ccr = build_ccr()
 
     df = exp.merge(prices, on=["Province", "Year"], how="left").merge(hh, on=["Province", "Quintile", "Year"], how="left").merge(rates, on=["Province", "Year"], how="left")

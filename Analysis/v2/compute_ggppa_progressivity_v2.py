@@ -78,10 +78,10 @@ CAT_MAP = {
 
 # Reduced-form natural gas conversion (GJ per dollar of expenditure), by province
 GJ_PER_DOLLAR = {
-    "Ontario": 0.0527,
-    "Manitoba": 0.0561,
-    "Saskatchewan": 0.0503,
-    "Alberta": 0.0612,
+    "Ontario": 0.0720192545,
+    "Manitoba": 0.1386298932,
+    "Saskatchewan": 0.0878257722,
+    "Alberta": 0.0858479021,
 }
 
 M3_PER_GJ = 26.853  # CRA Schedule 2 conversion

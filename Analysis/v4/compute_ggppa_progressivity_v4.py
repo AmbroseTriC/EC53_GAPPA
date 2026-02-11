@@ -368,14 +368,38 @@ def calibrate_kappa(df: pd.DataFrame) -> pd.DataFrame:
         alpha, beta = np.linalg.lstsq(X, yvals, rcond=None)[0]
 
         for y in YEARS_FULL:
+            key = (prov, y)
+            if key not in direct_lookup:
+                raise ValueError(f"Missing direct tax average for Province={prov}, Year={y}.")
+            direct_avg_py = direct_lookup[key]
+            finance_anchor = FINANCE_COST_IMPACT.get(y, {}).get(prov, np.nan)
+            kappa_anchor_implied = np.nan if np.isnan(finance_anchor) else finance_anchor / direct_avg_py - 1
+
             P = CARBON_PRICE[y]
             if P == 0:
+                k_ols = 0.0
                 k = 0.0
+                source = "zero_price"
             elif y in anchor[prov]:
+                k_ols = max(0.0, alpha + beta * P)
                 k = anchor[prov][y]
+                source = "anchor"
             else:
-                k = max(0.0, alpha + beta * P)
-            rows.append({"Province": prov, "Year": y, "kappa": k})
+                k_ols = max(0.0, alpha + beta * P)
+                k = k_ols
+                source = "ols_fitted"
+            rows.append(
+                {
+                    "Province": prov,
+                    "Year": y,
+                    "direct_tax_avg_prov_year": direct_avg_py,
+                    "finance_cost_impact_anchor": finance_anchor,
+                    "kappa_anchor_implied": kappa_anchor_implied,
+                    "kappa_ols_fitted": k_ols,
+                    "kappa_source": source,
+                    "kappa": k,
+                }
+            )
     return pd.DataFrame(rows)
 
 
@@ -450,6 +474,11 @@ def main() -> None:
         "tax_oil",
         "tax_ng",
         "direct_tax",
+        "direct_tax_avg_prov_year",
+        "finance_cost_impact_anchor",
+        "kappa_anchor_implied",
+        "kappa_ols_fitted",
+        "kappa_source",
         "kappa",
         "indirect_cost",
         "gross_cost",

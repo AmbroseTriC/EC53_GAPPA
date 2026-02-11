@@ -204,6 +204,49 @@ This document defines **every column** in the model output `ggppa_progressivity_
 
 ### Indirect effects (reduced-form wedge calibration)
 
+#### `direct_tax_avg_prov_year`
+- **Description**: Household-weighted provincial average of `direct_tax` for the province-year.
+- **Source**: Computed.
+- **Unit**: CAD per household-year.
+- **Logic**:
+  - Computed within each province-year using household weights:
+    $$\overline{D}_{p,t} = \frac{\sum_q w_{p,q,t} D_{p,q,t}}{\sum_q w_{p,q,t}}.$$
+  - This is an intermediate calibration input used to map Finance anchors into implied wedges.
+
+#### `finance_cost_impact_anchor`
+- **Description**: Finance Canada anchor value (average cost impact per household) for the province-year, when available.
+- **Source**: Script parameterization (`FINANCE_COST_IMPACT`).
+- **Unit**: CAD per household-year.
+- **Logic**:
+  - Populated for anchor years (2021, 2022, 2024); missing (`NaN`) for non-anchor years.
+
+#### `kappa_anchor_implied`
+- **Description**: Implied wedge from the anchor-year identity.
+- **Source**: Computed.
+- **Unit**: Unitless (share).
+- **Logic**:
+  - For years with an anchor:
+    $$\kappa^{anchor}_{p,t} = \frac{A_{p,t}}{\overline{D}_{p,t}} - 1.$$
+  - Missing (`NaN`) for non-anchor years.
+
+#### `kappa_ols_fitted`
+- **Description**: Province-specific OLS fitted wedge in carbon-price space.
+- **Source**: Computed.
+- **Unit**: Unitless (share).
+- **Logic**:
+  - Fit uses anchor years only: $\kappa_{p,t} = \alpha_p + \beta_p P_t$.
+  - Stored as `max(0, \alpha_p + \beta_p P_t)` for years with positive carbon price; set to 0 when carbon price is 0.
+  - In anchor years, this value is shown for transparency but final `kappa` is anchor-locked.
+
+#### `kappa_source`
+- **Description**: Rule used to assign final `kappa` in that province-year.
+- **Source**: Computed.
+- **Unit**: Text.
+- **Logic**:
+  - `anchor` for 2021/2022/2024,
+  - `ols_fitted` for non-anchor years with positive carbon price,
+  - `zero_price` when carbon price is zero (2025).
+
 #### `kappa`
 - **Description**: Province×year multiplicative **indirect-cost wedge**.
 - **Source**: Computed calibration parameter.

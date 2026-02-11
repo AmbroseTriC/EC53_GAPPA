@@ -1,4 +1,4 @@
-# ECON53 Quantitative Project
+# EC53 DAC Part
 
 This repository contains the quantitative workflow for the ECON53 group project on the progressivity of Canada's federal fuel charge (GGPPA Part I) and the Canada Carbon Rebate (CCR/CAI).
 

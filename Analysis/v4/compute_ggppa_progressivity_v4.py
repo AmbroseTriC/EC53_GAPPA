@@ -33,8 +33,9 @@ Notes
   linearly interpolated. 2024-2025 are held at 2023 levels absent additional data.
 
 - Indirect effects are represented via a multiplicative wedge kappa_{r,t} calibrated to
-  Finance Canada "average cost impact per household" in 2021 and 2024, then interpolated
-  linearly in the statutory carbon price.
+  Finance Canada "average cost impact per household" anchors in 2021, 2022, and 2024.
+  Anchor-year wedges are enforced exactly; non-anchor years are predicted from a
+  province-level OLS fit in statutory carbon-price space.
 
 - Natural gas quantities are approximated from expenditures using province-specific GJ/$
   factors (reduced form). The conversion 1 GJ = 26.853 m^3 is used to convert statutory
@@ -133,6 +134,7 @@ RURAL_TOPUP = {2019: 0.10, 2020: 0.10, 2021: 0.10, 2022: 0.10, 2023: 0.10, 2024:
 # Finance Canada cost-impact anchors for indirect wedge calibration (dollars per household)
 FINANCE_COST_IMPACT = {
     2021: {"Ontario": 439, "Manitoba": 462, "Saskatchewan": 720, "Alberta": 598},
+    2022: {"Ontario": 578, "Manitoba": 559, "Saskatchewan": 734, "Alberta": 700},
     2024: {"Ontario": 869, "Manitoba": 828, "Saskatchewan": 1156, "Alberta": 1056},
 }
 
@@ -336,28 +338,43 @@ def calibrate_kappa(df: pd.DataFrame) -> pd.DataFrame:
         .apply(lambda g: np.average(g["direct_tax"], weights=g["Households"]))
         .reset_index(name="direct_tax_avg")
     )
+    direct_lookup = {
+        (str(r["Province"]), int(r["Year"])): float(r["direct_tax_avg"])
+        for _, r in direct_avg.iterrows()
+    }
 
-    anchor = {}
+    anchor_years = sorted(int(y) for y in FINANCE_COST_IMPACT.keys())
+    anchor: dict[str, dict[int, float]] = {}
     for y, prov_dict in FINANCE_COST_IMPACT.items():
+        if y not in CARBON_PRICE:
+            raise ValueError(f"Anchor year {y} exists in FINANCE_COST_IMPACT but is missing from CARBON_PRICE.")
         for prov, cost in prov_dict.items():
-            direct = float(direct_avg[(direct_avg["Province"] == prov) & (direct_avg["Year"] == y)]["direct_tax_avg"])
+            key = (prov, y)
+            if key not in direct_lookup:
+                raise ValueError(f"Missing direct tax average for anchor calibration at Province={prov}, Year={y}.")
+            direct = direct_lookup[key]
             anchor.setdefault(prov, {})[y] = cost / direct - 1
 
     rows: list[dict] = []
     for prov in PROVINCES:
-        k1 = anchor[prov][2021]
-        k2 = anchor[prov][2024]
-        P1, P2 = CARBON_PRICE[2021], CARBON_PRICE[2024]
-        slope = (k2 - k1) / (P2 - P1)
-        intercept = k1 - slope * P1
+        if prov not in anchor:
+            raise ValueError(f"No Finance anchors available for province {prov}.")
+        for y in anchor_years:
+            if y not in anchor[prov]:
+                raise ValueError(f"Missing Finance anchor for Province={prov}, Year={y}.")
+
+        X = np.array([[1.0, float(CARBON_PRICE[y])] for y in anchor_years], dtype=float)
+        yvals = np.array([anchor[prov][y] for y in anchor_years], dtype=float)
+        alpha, beta = np.linalg.lstsq(X, yvals, rcond=None)[0]
+
         for y in YEARS_FULL:
             P = CARBON_PRICE[y]
             if P == 0:
                 k = 0.0
+            elif y in anchor[prov]:
+                k = anchor[prov][y]
             else:
-                k = intercept + slope * P
-                if k < 0:
-                    k = 0.0
+                k = max(0.0, alpha + beta * P)
             rows.append({"Province": prov, "Year": y, "kappa": k})
     return pd.DataFrame(rows)
 
@@ -493,7 +510,8 @@ def main() -> None:
     )
     diag = direct_avg.merge(gross_avg, on=["Province", "Year"], how="left")
     diag["Finance_cost_impact"] = diag.apply(lambda r: FINANCE_COST_IMPACT.get(int(r["Year"]), {}).get(r["Province"], np.nan), axis=1)
-    diag = diag[diag["Year"].isin([2021, 2024])].copy()
+    anchor_years = sorted(int(y) for y in FINANCE_COST_IMPACT.keys())
+    diag = diag[diag["Year"].isin(anchor_years)].copy()
     diag["Gross_minus_finance"] = diag["Gross_model_avg"] - diag["Finance_cost_impact"]
     diag.to_csv("ggppa_finance_crosswalk_v4.csv", index=False)
 

@@ -119,7 +119,11 @@ Given an external ``average cost impact per household'' anchor $A_{pt}$, the imp
 \begin{align}
   \kappa_{pt} = \frac{A_{pt}}{\overline{T}^{dir}_{pt}} - 1.
 \end{align}
-Second, the script interpolates $\kappa_{pt}$ linearly as a function of the carbon price schedule. In 2025, the script sets direct statutory rates to zero and imposes $\kappa_{pt}=0$.
+Second, the script fits a province-specific OLS line in carbon-price space using anchor years 2021, 2022, and 2024:
+\begin{align}
+  \kappa_{pt} = \alpha_p + \beta_p P_t.
+\end{align}
+Anchor years are imposed exactly at their implied values, while non-anchor years use the fitted value (floored at zero). In 2025, the script sets direct statutory rates to zero and imposes $\kappa_{pt}=0$.
 
 \subsection{CCR/CAI: net incidence under alternative household types}
 Let $R^{type}_{pt}$ denote the annual CCR schedule amount for household type \texttt{type} $\in \{$single adult, couple, family of four$\}$. Net cost is:
@@ -179,7 +183,7 @@ The model's statutory fuel charge rates are sourced from \texttt{Tax Rate Items\
 The script's CCR/CAI schedule parameters match Department of Finance backgrounders for each relevant benefit year: 2019, 2020, 2021, 2022--23, 2023--24, and 2024--25. CRA program pages on the Canada Carbon Rebate summarize quarterly payment amounts for previous base years and provide an additional check that the annual totals are in the correct range.
 
 \subsection{Indirect wedge calibration (government cost-impact anchors)}
-The file \texttt{ggppa\_finance\_crosswalk\_v2.csv} provides a diagnostic comparison between the model's household-weighted provincial average gross cost and the anchor values used for calibration in 2021 and 2024. Table~\ref{tab:finance_crosswalk} reproduces this crosswalk.
+The file \texttt{ggppa\_finance\_crosswalk\_v4.csv} provides a diagnostic comparison between the model's household-weighted provincial average gross cost and the anchor values used for calibration in 2021, 2022, and 2024. Table~\ref{tab:finance_crosswalk} reproduces this crosswalk.
 
 \input{table_finance_crosswalk.tex}
 
@@ -200,11 +204,11 @@ Key identities satisfied by the generated outputs include:
 \end{itemize}
 
 \section{Outputs and reproducibility}
-Running \texttt{compute\_ggppa\_progressivity\_v2.py} in the same directory as the input \texttt{.xlsx} files produces:
+Running \texttt{compute\_ggppa\_progressivity\_v4.py} in the same directory as the input \texttt{.xlsx} files produces:
 \begin{itemize}
-  \item \texttt{ggppa\_progressivity\_results\_v2.csv}: main province$\times$quintile$\times$year incidence outputs (with intermediate calculations),
-  \item \texttt{ggppa\_kakwani\_indices\_v2.csv}: Kakwani indices for selected measures,
-  \item \texttt{ggppa\_finance\_crosswalk\_v2.csv}: indirect wedge calibration diagnostic.
+  \item \texttt{ggppa\_progressivity\_results\_v4.csv}: main province$\times$quintile$\times$year incidence outputs (with intermediate calculations),
+  \item \texttt{ggppa\_kakwani\_indices\_v4.csv}: Kakwani indices for selected measures,
+  \item \texttt{ggppa\_finance\_crosswalk\_v4.csv}: indirect wedge calibration diagnostic.
 \end{itemize}
 A full variable dictionary is provided in \texttt{DATA\_DICTIONARY.md}.
 

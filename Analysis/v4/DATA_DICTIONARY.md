@@ -211,9 +211,11 @@ This document defines **every column** in the model output `ggppa_progressivity_
 - **Logic**:
   - Let $\overline{D}_{p,t}$ be the household-weighted average direct tax in province $p$ year $t$.
   - Let $A_{p,t}$ be a government “average cost impact per household” anchor for that province-year.
-  - For anchor years (2021 and 2024 in this script), the implied wedge is:
+  - For anchor years (2021, 2022, and 2024 in this script), the implied wedge is:
     $$\kappa_{p,t} = \frac{A_{p,t}}{\overline{D}_{p,t}} - 1.$$
-  - The script then fits a linear function of the statutory carbon price and applies it to all years; if carbon price is 0 (2025), $\kappa_{p,t}=0$.
+  - The script fits a province-specific OLS line in statutory carbon-price space,
+    $\kappa_{p,t} = \alpha_p + \beta_p \cdot P_t$, using anchor years only.
+  - Anchor years are enforced exactly at their implied values; non-anchor years are assigned fitted values (floored at zero), and if carbon price is 0 (2025), $\kappa_{p,t}=0$.
 
 #### `indirect_cost`
 - **Description**: Dollar value of indirect costs implied by the wedge.
@@ -331,4 +333,3 @@ $$\text{ETR}_{p,q,t}(\cdot) = \frac{\text{Incidence measure}_{p,q,t}(\cdot)}{\te
 - **Description**: Net cost under CCR including rural supplement, by household type, as a share of total expenditure.
 - **Source**: Computed.
 - **Unit**: Share.
-

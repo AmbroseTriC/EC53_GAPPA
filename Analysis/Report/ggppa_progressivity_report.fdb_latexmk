@@ -1,6 +1,7 @@
 # Fdb version 4
-["pdflatex"] 1770822892.13595 "/Users/ambrosewang/Library/CloudStorage/OneDrive-UniversityCollegeLondon/ECON0053 Economics of Tax Policy/Grp Project/Quantitative/Analysis/Report/ggppa_progressivity_report.tex" "ggppa_progressivity_report.pdf" "ggppa_progressivity_report" 1770822892.6789 0
-  "/Users/ambrosewang/Library/CloudStorage/OneDrive-UniversityCollegeLondon/ECON0053 Economics of Tax Policy/Grp Project/Quantitative/Analysis/Report/ggppa_progressivity_report.tex" 1770822892.00399 19127 ba18898bfdddee4c4ed4064c320600f9 ""
+["pdflatex"] 1770904346.64222 "/Users/ambrosewang/Library/CloudStorage/OneDrive-UniversityCollegeLondon/ECON0053 Economics of Tax Policy/Grp Project/Quantitative/Analysis/Report/ggppa_progressivity_report.tex" "ggppa_progressivity_report.pdf" "ggppa_progressivity_report" 1770904347.21476 0
+  "../Figures/kakwani_heatmap_facets_combined.pdf" 1770897052.18122 72899 6a4769a9ea5f25a82c5dd52fed614174 ""
+  "/Users/ambrosewang/Library/CloudStorage/OneDrive-UniversityCollegeLondon/ECON0053 Economics of Tax Policy/Grp Project/Quantitative/Analysis/Report/ggppa_progressivity_report.tex" 1770904346.43137 19611 9d5ebac52826651b1252ec3e6ddfd239 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1136849721 2971 def0b6c1f0b107b3b936def894055589 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -23,8 +24,10 @@
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1246382020 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1246382020 916 f87d7c45f9c908e672703b83b72241a3 ""
+  "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm" 1246382020 924 9904cf1d39e9767e7a3622f2a125a565 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam7.tfm" 1246382020 928 2dc8d444221b7a635bb58038579b861a ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm" 1246382020 908 2921f8a10601f252058503cc6570e581 ""
+  "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm5.tfm" 1246382020 940 75ac932a52f80982a9f8ea75d03a34cf ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm" 1246382020 940 228d6584342e91276bf566bcf9716b83 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmex10.tfm" 1136768653 992 662f679a0b3d2d53c1b94050fdaa3f50 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmmi10.tfm" 1136768653 1528 abec98dbc43e172678c11b3b9031252a ""
@@ -128,10 +131,10 @@
   "fig_etr_gross_2024.pdf" 1770820848.30965 19140 821bb025cb5122df3ad6e26a9f16f027 ""
   "fig_etr_net_family4_base_2024.pdf" 1770820848.5973 18831 fd534865c987757e34a1cf16076b1d53 ""
   "fig_gross_cost_avg_trend.pdf" 1770820848.84983 18492 5173c2c93c35b8b73f199a1c9f7d4bb4 ""
-  "ggppa_progressivity_report.aux" 1770822892.59363 6147 8b4d4a3d786b70acbeaa83bc3c61c79b "pdflatex"
-  "ggppa_progressivity_report.out" 1770822892.59407 5106 e05826de9fd74f4a066df6be6cf4f1bc "pdflatex"
-  "ggppa_progressivity_report.tex" 1770822892.00399 19127 ba18898bfdddee4c4ed4064c320600f9 ""
-  "table_finance_crosswalk.tex" 1770822596.94188 938 1294765b4ee25b75ca80200588739fa8 ""
+  "ggppa_progressivity_report.aux" 1770904347.11948 6472 a968aea84986045691dc643182bae42e "pdflatex"
+  "ggppa_progressivity_report.out" 1770904347.12017 5106 e05826de9fd74f4a066df6be6cf4f1bc "pdflatex"
+  "ggppa_progressivity_report.tex" 1770904346.43137 19611 9d5ebac52826651b1252ec3e6ddfd239 ""
+  "table_finance_crosswalk.tex" 1770823052.12404 1025 b030072e4b505db2d0f06fa49c36dda1 ""
   "table_kakwani.tex" 1770821444.57887 6843 38203b27fe275bbf0dff26cd60300c3d ""
   "table_selected_results.tex" 1770821394.34329 3349 3c1edb6d80a2f711550818cf885350ce ""
   (generated)

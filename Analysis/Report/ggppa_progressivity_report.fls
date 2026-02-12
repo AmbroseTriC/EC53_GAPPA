@@ -219,9 +219,17 @@ INPUT table_selected_results.tex
 INPUT ./table_finance_crosswalk.tex
 INPUT ./table_finance_crosswalk.tex
 INPUT table_finance_crosswalk.tex
+INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
+INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam5.tfm
+INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm5.tfm
 INPUT ./table_kakwani.tex
 INPUT ./table_kakwani.tex
 INPUT table_kakwani.tex
+INPUT ../Figures/kakwani_heatmap_facets_combined.pdf
+INPUT ../Figures/kakwani_heatmap_facets_combined.pdf
+INPUT ../Figures/kakwani_heatmap_facets_combined.pdf
+INPUT ../Figures/kakwani_heatmap_facets_combined.pdf
+INPUT ../Figures/kakwani_heatmap_facets_combined.pdf
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/ectt0800.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/ectt0800.tfm
 INPUT ggppa_progressivity_report.aux
